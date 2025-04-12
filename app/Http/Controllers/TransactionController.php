@@ -25,9 +25,9 @@ class TransactionController extends Controller
         return response()->json(['message' => 'Deposit successful', 'data' => new TransactionResource($transaction)], 201);
     }
 
-    public function reverse(Transaction $transaction, TransactionReverseRequest $request,ReverseAction $action)
+    public function reverse(Transaction $transaction, TransactionReverseRequest $request, ReverseAction $action)
     {
         $transaction = $action->execute($transaction, $request->validated());
-        return response()->json(['message' => 'Reverse successful'], 201);
+        return response()->json(['message' => 'Reverse successful'], 200);
     }
 }
