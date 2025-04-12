@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'document' => $this->document,
-            'balance' => $this->balance,
+            'balance' => (float) $this->balance,
             'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
         ];
     }
