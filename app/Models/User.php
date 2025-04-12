@@ -21,9 +21,14 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'document',
         'password',
     ];
 
+    protected $casts = [
+        'balance' => 'decimal:2',
+    ];
+    
     /**
      * The attributes that should be hidden for serialization.
      *
