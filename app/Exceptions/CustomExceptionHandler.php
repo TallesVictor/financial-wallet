@@ -21,9 +21,8 @@ class CustomExceptionHandler implements ExceptionHandler
     public function render($request, Throwable $e): JsonResponse
     {
         return response()->json([
-            // 'error' => $e->getMessage(),
-            'message' => $e->getMessage(),
-        ], $e->getCode() ?: 500);
+            'message' => $e->getMessage()?: 'Something went wrong',
+        ], $e->getStatusCode() ?: 500);
     }
 
     public function renderForConsole($output, Throwable $e): void
