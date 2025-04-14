@@ -72,3 +72,13 @@ function getStatus(status) {
   }
 }
 
+
+function hideSpinner(idDiv) {
+  $("#" + idDiv).removeClass("d-none");
+  $("#loadingSpinner").addClass("d-none");
+}
+
+function showSpinner(idDiv) {
+  $("#" + idDiv).addClass("d-none");
+  $("#loadingSpinner").removeClass("d-none");
+}

@@ -9,17 +9,14 @@
                 <h4 class="card-title mb-4 text-center">Novo Depósito</h4>
 
                 {{-- Loading Spinner --}}
-                <div id="loadingSpinner" class="d-flex justify-content-center align-items-center mb-3">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Carregando...</span>
-                    </div>
-                </div>
+                @include('layouts.spinner')
+                
                 <div id="divDeposit" class="d-none">
 
                     <div class="mb-3">
-                        <label class="form-label">Seu saldo atual:</label>
                         <div class="input-group">
-                            <span class="input-group-text" id="myBalance"></span>
+                            <label class="form-label align-self-center">Seu saldo atual:</label> &nbsp;
+                            <span class="fw-bolder" id="myBalance"></span>
                         </div>
                     </div>
 

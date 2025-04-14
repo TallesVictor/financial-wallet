@@ -25,7 +25,7 @@ async function formTransfer() {
             getBalance();
             setTimeout(() => {
                 $("#responseMessage").text("");
-            }, 1500);
+            }, 5000);
         } else {
             $("#responseMessage").text(data.message);
         }

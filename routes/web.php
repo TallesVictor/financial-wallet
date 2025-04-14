@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\SessionAuth;
 use App\Http\Middleware\SessionAuthenticate;
 use Illuminate\Support\Facades\Route;
 
@@ -12,9 +11,9 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-Route::get('/create/user', function () {
+Route::get('/register', function () {
     return view('users.create');
-});
+})->name('user.register');
 Route::middleware(SessionAuthenticate::class)->group(function () {
 
     Route::prefix('/transactions')->group(function () {
@@ -32,9 +31,3 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
     });
 
 });
-
-
-
-// Route::get('/users', function () {
-//     return view('users.index');
-// });

@@ -19,9 +19,13 @@
 </head>
 
 <body>
+    {{-- mostrar se tiver logado apenas --}}
+
+    
+    @auth
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">CarteiraApp</a>
+            <a class="navbar-brand" href="{{ url('/') }}">Financial Wallet</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false" aria-label="Alternar navegação">
                 <span class="navbar-toggler-icon"></span>
@@ -48,6 +52,7 @@
             </div>
         </div>
     </nav>
+    @endauth
 
 
     <div class="container mt-4">

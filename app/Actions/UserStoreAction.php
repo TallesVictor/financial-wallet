@@ -2,10 +2,9 @@
 
 namespace App\Actions;
 
-use App\Services\TransactionService;
 use App\Services\UserService;
 
-class UsersListAction
+class UserStoreAction
 {
 
     protected UserService $service;
@@ -17,6 +16,6 @@ class UsersListAction
 
     public function execute(array $data)
     {
-        return $this->service->list($data);
+        return $this->service->store($data);
     }
 }

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\UsersListAction;
+use App\Actions\UserListAction;
+use App\Actions\UserStoreAction;
 use App\Http\Requests\User\UserIndexRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Resources\UserResource;
@@ -14,7 +15,7 @@ class UserController extends Controller
 {
 
 
-    public function index(UserIndexRequest $request, UsersListAction $action)
+    public function index(UserIndexRequest $request, UserListAction $action)
     {
         $users = $action->execute($request->validated());
         return response()->json(UserResource::collection($users), 200);
@@ -23,9 +24,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserStoreRequest $request)
+    public function store(UserStoreRequest $request, UserStoreAction $action)
     {
-        $this->userService->store($request->validated());
+        $action->execute($request->validated());
         return response()->json(['message' => 'User created successfully'], 201);
     }
 
