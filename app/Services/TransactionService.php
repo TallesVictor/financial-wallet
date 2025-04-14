@@ -11,6 +11,18 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class TransactionService
 {
+    /**
+     * Perform a transfer between two users.
+     *
+     * @param User $sender The user that is sending the money.
+     * @param int $recipientId The id of the user that is receiving the money.
+     * @param float $amount The amount of money being transferred.
+     *
+     * @throws UnprocessableEntityHttpException If the amount is not greater than 0.
+     * @throws UnprocessableEntityHttpException If the sender does not have enough balance.
+     *
+     * @return Transaction The transaction that was created.
+     */
     public function transfer(User $sender, int $recipientId, float $amount): Transaction
     {
         if ($amount <= 0) throw new UnprocessableEntityHttpException('Amount must be greater than 0.');
@@ -41,6 +53,16 @@ class TransactionService
         return $transaction;
     }
 
+    /**
+     * Deposit money into the user's account.
+     *
+     * @param User $user The user to deposit money into.
+     * @param float $amount The amount of money to deposit.
+     *
+     * @throws UnprocessableEntityHttpException If the amount is not greater than 0.
+     *
+     * @return Transaction The transaction that was created.
+     */
     public function deposit(User $user, float $amount): Transaction
     {
         $transaction = DB::transaction(function () use ($user, $amount) {
@@ -63,6 +85,16 @@ class TransactionService
         return $transaction;
     }
 
+    /**
+     * Reverse a transaction.
+     *
+     * @param Transaction $transaction The transaction to reverse.
+     * @param string $description The description for the reversal.
+     *
+     * @throws UnprocessableEntityHttpException If the transaction is not reversible.
+     *
+     * @return Transaction The reversed transaction.
+     */
     public function reverse(Transaction $transaction, string $description): Transaction
     {
         if (!$transaction->isReversible()) {
@@ -89,6 +121,15 @@ class TransactionService
         });
     }
 
+    /**
+     * Reverses a transfer transaction by incrementing the sender's balance and
+     * decrementing the recipient's balance.
+     *
+     * @param Transaction $transaction The transaction to reverse.
+     * @param User $recipient The recipient of the transaction to reverse.
+     *
+     * @return void
+     */
     private function reverseTransfer(Transaction $transaction, $recipient)
     {
         $sender = $transaction->sender;
@@ -97,6 +138,14 @@ class TransactionService
         $sender->increment('balance', $transaction->amount);
     }
 
+    /**
+     * Reverses a deposit transaction by decrementing the recipient's balance.
+     *
+     * @param Transaction $transaction The transaction to reverse.
+     * @param User $recipient The recipient of the transaction to reverse.
+     *
+     * @return void
+     */
     private function reverseDeposit(Transaction $transaction, $recipient)
     {
         $recipient->decrement('balance', $transaction->amount);

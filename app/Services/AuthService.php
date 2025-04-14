@@ -2,15 +2,25 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class AuthService
 {
+
+    /**
+     * Authenticate a user with the provided credentials.
+     *
+     * Attempts to log in the user using the web guard. If successful, regenerates
+     * the session to prevent session fixation and returns a new API token.
+     * If the credentials do not match, a ConflictHttpException is thrown.
+     *
+     * @param array $credentials The user's credentials for authentication.
+     * @return string The generated plain text API token for the authenticated user.
+     * @throws ConflictHttpException If the authentication attempt fails.
+     */
+
     public function login(array $credentials): string
     {
         if (Auth::guard('web')->attempt($credentials)) {
@@ -22,6 +32,18 @@ class AuthService
 
         throw new ConflictHttpException('Credentials do not match.');
     }
+    /**
+     * Log out the authenticated user by revoking all API tokens 
+     * and invalidating the current session.
+     *
+     * @param \Illuminate\Http\Request $request The current HTTP request instance,
+     * which may include a bearer token for API authentication.
+     *
+     * This method will revoke all tokens associated with the user if an API 
+     * token is present. Additionally, it will log out the user from the web 
+     * guard, invalidate the session, and regenerate the session token to 
+     * prevent session fixation attacks.
+     */
 
     public function logout(Request $request): void
     {
