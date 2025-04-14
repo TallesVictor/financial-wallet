@@ -71,7 +71,7 @@ docker exec -it laravel_php php artisan db:seed
 ## 🧪 Executando Testes
 Para rodar os testes, utilize:
 ```sh
-php artisan test
+docker exec -it laravel_php php artisan test
 ```
 
 ## 💻 Abrir o projeto no navegador
