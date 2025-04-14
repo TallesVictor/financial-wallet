@@ -54,6 +54,11 @@ class TransactionController extends Controller
         return response()->json(['message' => 'Reverse successful'], 200);
     }
 
+    /**
+     * Return a list of the transactions associated with the authenticated user.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function list() {
         $transactions =auth()->user()->transactions;
         return response()->json(TransactionResource::collection($transactions), 200);
