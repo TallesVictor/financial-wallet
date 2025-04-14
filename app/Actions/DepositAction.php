@@ -16,6 +16,6 @@ class DepositAction
 
     public function execute(array $data)
     {
-        return $this->service->deposit(auth()->user(),  $data['amount'], $data['description']??'');
+        return $this->service->deposit(auth()->user(),  $data['amount']);
     }
 }

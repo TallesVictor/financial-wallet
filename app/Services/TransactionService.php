@@ -11,15 +11,17 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class TransactionService
 {
-    public function transfer(User $sender, int $recipientId, float $amount,  string $description = ''): Transaction
+    public function transfer(User $sender, int $recipientId, float $amount): Transaction
     {
+        if ($amount <= 0) throw new UnprocessableEntityHttpException('Amount must be greater than 0.');
+        
         $senderBalance = (float) $sender->balance;
 
         if ($senderBalance < $amount) {
             throw new UnprocessableEntityHttpException('Insufficient balance.');
         }
 
-        $transaction = DB::transaction(function () use ($sender, $recipientId, $amount, $description) {
+        $transaction = DB::transaction(function () use ($sender, $recipientId, $amount) {
             $recipient = User::findOrFail($recipientId);
 
             $sender->decrement('balance', $amount);
@@ -29,32 +31,33 @@ class TransactionService
                 'sender_id' => $sender->id,
                 'recipient_id' => $recipient->id,
                 'amount' => $amount,
-                'description' => $description,
-                'type' => TransactionType::TRANSFER,
+                'type' => TransactionType::TRANSFER->value,
             ]);
         });
 
-        $transaction->status = TransactionStatus::SUCCESS;
+        $transaction->status = TransactionStatus::SUCCESS->value;
         $transaction->save();
 
         return $transaction;
     }
 
-    public function deposit(User $user, float $amount, string $description = ''): Transaction
+    public function deposit(User $user, float $amount): Transaction
     {
-        $transaction = DB::transaction(function () use ($user, $amount, $description) {
+        $transaction = DB::transaction(function () use ($user, $amount) {
+
+            if ($amount <= 0) throw new UnprocessableEntityHttpException('Amount must be greater than 0.');
+
             $user->increment('balance', $amount);
 
             return Transaction::create([
                 'recipient_id' => $user->id,
                 'sender_id' => $user->id,
                 'amount' => $amount,
-                'description' => $description,
-                'type' => TransactionType::DEPOSIT,
+                'type' => TransactionType::DEPOSIT->value,
             ]);
         });
 
-        $transaction->status = TransactionStatus::SUCCESS;
+        $transaction->status = TransactionStatus::SUCCESS->value;
         $transaction->save();
 
         return $transaction;
@@ -76,11 +79,9 @@ class TransactionService
                 case TransactionType::TRANSFER->value:
                     $this->reverseTransfer($transaction, $recipient);
                     break;
-                default:
-                    throw new UnprocessableEntityHttpException('Transaction type not supported.');
             }
 
-            $transaction->status = TransactionStatus::REVERSED;
+            $transaction->status = TransactionStatus::REVERSED->value;
             $transaction->description = $description;
             $transaction->save();
 

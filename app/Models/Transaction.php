@@ -36,7 +36,6 @@ class Transaction extends Model  implements AuditableContract
      */
     protected $casts = [
         'amount' => 'decimal:2',
-        'balance' => 'decimal:2',
     ];
 
     protected $dates = [
