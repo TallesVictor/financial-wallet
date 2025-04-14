@@ -23,6 +23,7 @@ class TransactionResource extends JsonResource
             'transaction_date' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             'amount' => (float) $this->amount,
             'description' => $this->description,
+            'status' => $this->status,
             'sender' => [
                 'id' => $sender->id,
                 'name' => $sender->name,

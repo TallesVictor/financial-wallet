@@ -53,4 +53,10 @@ class User extends Authenticatable implements AuditableContract
             'password' => 'hashed',
         ];
     }
+
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'recipient_id')->orWhere('sender_id', $this->id);
+    }
 }

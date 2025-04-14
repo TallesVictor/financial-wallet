@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UsersListAction;
+use App\Http\Requests\User\UserIndexRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -11,14 +13,11 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
 
-    public function __construct(protected UserService $userService) {}
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(UserIndexRequest $request, UsersListAction $action)
     {
-       return response()->json(UserResource::collection(User::all()), 200);
+        $users = $action->execute($request->validated());
+        return response()->json(UserResource::collection($users), 200);
     }
 
     /**
@@ -26,7 +25,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-       $this->userService->store($request->validated());
+        $this->userService->store($request->validated());
         return response()->json(['message' => 'User created successfully'], 201);
     }
 
@@ -38,4 +37,14 @@ class UserController extends Controller
         return response()->json(new UserResource($user), 200);
     }
 
+    /**
+     * Return the balance of the authenticated user.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getBalance()
+    {
+        $user = auth()->user();
+        return response()->json(['balance' => (float) $user->balance], 200);
+    }
 }

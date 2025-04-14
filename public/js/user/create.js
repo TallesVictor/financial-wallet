@@ -23,6 +23,10 @@ $(document).ready(function () {
                         <div class="alert alert-success">${response.message}</div>
                     `);
                 $('#createUserForm')[0].reset();
+
+                setTimeout(function () {
+                    window.location.href = '/login';
+                }, 1500);
             },
             error: function (response) {
                 let errorMessage = response.responseJSON.message;

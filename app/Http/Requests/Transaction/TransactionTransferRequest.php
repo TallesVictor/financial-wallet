@@ -32,7 +32,6 @@ class TransactionTransferRequest extends FormRequest
                     }
                 },
             ],
-            'description' => 'nullable|string|max:60000',
         ];
     }
     

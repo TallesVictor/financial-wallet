@@ -18,7 +18,7 @@ class AuthService
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-
+        
         return $user->createToken('api-token')->plainTextToken;
     }
 

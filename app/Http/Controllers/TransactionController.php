@@ -53,4 +53,9 @@ class TransactionController extends Controller
         $transaction = $action->execute($transaction, $request->validated());
         return response()->json(['message' => 'Reverse successful'], 200);
     }
+
+    public function list() {
+        $transactions =auth()->user()->transactions;
+        return response()->json(TransactionResource::collection($transactions), 200);
+    }
 }

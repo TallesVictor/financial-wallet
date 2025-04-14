@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::controller(UserController::class)->group(function () {
         Route::get('/users', 'index');
+        Route::get('/user/balance', 'getBalance');
         Route::get('/user/{user:id}', 'show');
     });
 
@@ -23,5 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/transfer', 'transfer');
         Route::post('/deposit', 'deposit');
         Route::post('{transaction:transaction_id}/reverse', 'reverse');
+        Route::get('/list', 'list');
     });
 });
