@@ -6,6 +6,7 @@ use App\Enums\TransactionStatus;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Repositories\TransactionRepository;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -34,7 +35,7 @@ class TransactionControllerTest extends TestCase
             ]);
 
         $transactionId = $response->json()['data']['transaction_id'];
-        $transaction = Transaction::where('transaction_id', $transactionId)->first();
+        $transaction = app(TransactionRepository::class)->findByTransactionId($transactionId);
 
         $this->assertEquals($send->id, $transaction->sender_id);
         $this->assertEquals($recipient->id, $transaction->recipient_id);
@@ -142,7 +143,7 @@ class TransactionControllerTest extends TestCase
             ]);
 
         $transactionId = $response->json()['data']['transaction_id'];
-        $transaction = Transaction::where('transaction_id', $transactionId)->first();
+        $transaction = app(TransactionRepository::class)->findByTransactionId($transactionId);
 
         $this->assertEquals($send->id, $transaction->sender_id);
         $this->assertEquals($send->id, $transaction->recipient_id);
