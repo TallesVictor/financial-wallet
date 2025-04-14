@@ -89,7 +89,7 @@ docker exec -it laravel_php php artisan test
 
 ## 💻 Tecnologias utilizadas
   - PHPUnit - Testes Unitários e de Controller
-  - Utilizando conceitos como DTOs, Contracts, Repositories, Resources, Factories, entre outros.
+  - Utilizando conceitos de programação limpa e princípios do SOLID
 
 ## 📌 Documentação das Rotas
 As rotas da API estão disponíveis no Postman.
