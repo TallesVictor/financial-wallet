@@ -4,26 +4,40 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class AuthService
 {
-    public function login(array $data): string
+    public function login(array $credentials): string
     {
-        $user = User::where('email', $data['email'])->first();
+        if (Auth::guard('web')->attempt($credentials)) {
+            request()->session()->regenerate();
 
-        if (! $user || ! Hash::check($data['password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+            $user = Auth::guard('web')->user();
+            return $user->createToken('api_token')->plainTextToken;
         }
-        
-        return $user->createToken('api-token')->plainTextToken;
+
+        throw new ConflictHttpException('Credentials do not match.');
     }
 
     public function logout(Request $request): void
     {
-        $request->user()->currentAccessToken()->delete();
+
+        //Revoke the token api
+        if ($request->bearerToken()) {
+            $request->user()->tokens->each(function ($userToken)  {
+                $userToken->delete();
+            });
+        }
+        // Logout the user of web
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
     }
 }

@@ -16,7 +16,7 @@ $('#login-form').on('submit', function (e) {
         },
         success: function (response) {
             localStorage.setItem('token_financial_wallet', response.token);
-            
+            window.location.href = '/transactions/transfer';
         },
         error: function (response) {
             $('#login-alert')

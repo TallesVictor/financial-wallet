@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\AuthLoginRequest;
 use Illuminate\Http\Request;
 use App\Services\AuthService;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -19,6 +20,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+
         $this->authService->logout($request);
 
         return response()->json(['message' => 'Logout successful']);

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\SessionAuth;
+use App\Http\Middleware\SessionAuthenticate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,20 +15,26 @@ Route::get('/login', function () {
 Route::get('/create/user', function () {
     return view('users.create');
 });
+Route::middleware(SessionAuthenticate::class)->group(function () {
 
-Route::middleware(['web'])->get('/transactions/transfer', function () {
-    return view('transactions.transfer');
-})->name('transactions.transfer');
+    Route::prefix('/transactions')->group(function () {
+        Route::get('/transfer', function () {
+            return view('transactions.transfer');
+        })->name('transactions.transfer');
 
-Route::middleware(['web'])->get('/transactions/list', function () {
-    return view('transactions.list');
-})->name('transactions.list');
+        Route::get('/list', function () {
+            return view('transactions.list');
+        })->name('transactions.list');
 
-Route::middleware(['web'])->get('/transactions/deposit', function () {
-    return view('transactions.deposit');
-})->name('transactions.deposit');
+        Route::get('/deposit', function () {
+            return view('transactions.deposit');
+        })->name('transactions.deposit');
+    });
+
+});
+
+
 
 // Route::get('/users', function () {
 //     return view('users.index');
 // });
-
